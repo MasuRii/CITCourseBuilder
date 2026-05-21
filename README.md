@@ -17,6 +17,9 @@
 <p align="center">
   <img src="course-scheduler-astro/public/CIT-U%20Course%20Builder_App.png" alt="CIT-U Course Builder Application Screenshot" width="700" />
 </p>
+<p align="center">
+  <a href="https://citcoursebuilder.masurii.dev"><img src="https://img.shields.io/badge/Live_Site-citcoursebuilder.masurii.dev-blue?style=for-the-badge" alt="Live Site" /></a>
+</p>
 
 ## About The Project
 
