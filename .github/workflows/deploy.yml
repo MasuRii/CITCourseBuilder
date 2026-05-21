@@ -1,100 +1,30 @@
-name: Deploy Astro App to GitHub Pages
+# GitHub Pages deployment DISABLED in favor of Cloudflare Pages (citcoursebuilder.masurii.dev)
+# To re-enable: replace the workflow_dispatch trigger below and restore the full workflow
+# Original workflow: renamed from deploy.yml to deploy.yml.disabled conceptually
+name: Deploy Astro App to GitHub Pages [DISABLED]
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type YES to confirm re-enabling GitHub Pages deployment'
+        required: true
+        default: 'NO'
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: 'pages'
+  group: 'pages-disabled'
   cancel-in-progress: true
 
 jobs:
-  build:
+  noop:
     runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'YES'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Cache Bun dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.bun/install/cache
-            node_modules
-            course-scheduler-astro/node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-
-      - name: Install root dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Install Astro dependencies
-        run: bun install --frozen-lockfile
-        working-directory: ./course-scheduler-astro
-
-      - name: Run lint
-        run: bun run lint
-
-      - name: Run typecheck
-        run: bun run typecheck
-        working-directory: ./course-scheduler-astro
-
-      - name: Run tests
-        run: bun run test
-        working-directory: ./course-scheduler-astro
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright Browsers
-        run: bunx playwright install --with-deps chromium
-        working-directory: ./course-scheduler-astro
-
-      - name: Run E2E tests
-        run: bunx playwright test --grep-invert "Visual Regression"
-        working-directory: ./course-scheduler-astro
-
-      - name: Build project
-        run: bun run build
-        working-directory: ./course-scheduler-astro
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./course-scheduler-astro/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: GitHub Pages deployment is disabled
+        run: |
+          echo "GitHub Pages deployment has been disabled."
+          echo "The project is now deployed via Cloudflare Pages at https://citcoursebuilder.masurii.dev"
+          echo "To re-enable GitHub Pages, restore the original deploy.yml workflow."
