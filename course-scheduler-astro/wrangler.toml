@@ -1,0 +1,9 @@
+# Cloudflare Pages configuration for CITU Course Builder
+# Deploy: wrangler pages deploy dist --project-name citucoursebuilder --branch main
+# Custom domain: citcoursebuilder.masurii.dev
+
+name = "citucoursebuilder"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-05-21"
+
+# Static site - no Workers functions needed
